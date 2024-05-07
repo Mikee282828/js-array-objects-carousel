@@ -11,8 +11,11 @@
     align-items: center;
 }
 .description{
+    padding-right:2rem;
+    padding-bottom:2rem;
+    display:none;
     position:absolute;
-    bottom:10%;
+    bottom:0;
     right:0;
     color:white;
     text-align: right;
