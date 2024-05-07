@@ -24,6 +24,7 @@ const images = [
 ];
 //aggiungo su pagina gli elementi html
 images.forEach(element => {
+    //aggiungo la slide
     document.querySelector(".slide").innerHTML +=
         `
         <img src="./${element.image}" alt="spiderman" class="foto">
@@ -33,11 +34,20 @@ images.forEach(element => {
             <p class="subtitle">${element.text}</p>
         </div>
         `;
-    document.querySelector(".anteprima").innerHTML +=
-        `
-        <img src="./${element.image}" alt="spiderman" class="fotoAnteprima">
-        `
+    //aggiungo l'anteprima
+    let anteprima = document.createElement("img");
+    anteprima.src = element.image;
+    anteprima.classList.add("fotoAnteprima");
+    document.querySelector(".anteprima").append(anteprima);
+    anteprima.addEventListener("click",function(){  
+        //cerco e tolgo la slide attualmente attiva
+        searchActive()
+        console.log(this);
+    });
 });
+
+
+
 //attivo la prima foto, descrizione, foto anteprima
 document.querySelector(".slide>.foto:first-of-type").classList.add("active");
 document.querySelector(".slide>.description:first-of-type").classList.add("active");
@@ -47,22 +57,15 @@ document.querySelector(".anteprima>.fotoAnteprima:first-of-type").classList.add(
 let arrayFoto = document.querySelectorAll(".foto");
 let arrayAnteprima = document.querySelectorAll(".fotoAnteprima");
 let arrayDescription = document.querySelectorAll(".description");
-let fotoAttiva;
-let fotoSelezionata;
 const tastoSuccessivo = document.querySelector(".successivo");
 const tastoPrecedente = document.querySelector(".precedente");
+let fotoAttiva;
+let fotoSelezionata;
+
 
 tastoPrecedente.addEventListener("click", function () {
 
-    //cerco la foto attualmente attiva
-    for (let i = 0; i < arrayFoto.length; i++) {
-        if (arrayFoto[i].classList.contains("active")) {
-            fotoAttiva = i;
-            arrayFoto[i].classList.remove("active");
-            arrayAnteprima[i].classList.remove("anteprimaActive");
-            arrayDescription[i].classList.remove("active");
-        }
-    }
+    searchActive()
     //cerco l'indice della foto precedente
     if (fotoAttiva == 0) {
         fotoSelezionata = arrayFoto.length - 1;
@@ -70,21 +73,25 @@ tastoPrecedente.addEventListener("click", function () {
         fotoSelezionata = fotoAttiva - 1;
     }
 
-    //attivo la foto precedente
-    arrayFoto[fotoSelezionata].classList.add("active");
-    //attivo l'anteprima precedente
-    arrayAnteprima[fotoSelezionata].classList.add("anteprimaActive");
-    //attivo la description precedente
-    arrayDescription[fotoSelezionata].classList.add("active");
-
-    //stampo in pagina l'array foto per controllo
-    console.log(arrayFoto);
+    //attivo la foto,anteprima,description precedente
+    newActivate();
 })
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 tastoSuccessivo.addEventListener("click", function () {
     
-    //cerco la foto attualmente attiva
+    searchActive()
+    //cerco l'indice della foto successiva
+    if (fotoAttiva + 1 == arrayFoto.length) {
+        fotoSelezionata = 0;
+    } else {
+        fotoSelezionata = fotoAttiva + 1;
+    }
+
+    //attivo la foto,anteprima,description successiva
+    newActivate();
+})
+
+function searchActive(){
     for (let i = 0; i < arrayFoto.length; i++) {
         if (arrayFoto[i].classList.contains("active")) {
             fotoAttiva = i;
@@ -93,22 +100,9 @@ tastoSuccessivo.addEventListener("click", function () {
             arrayDescription[i].classList.remove("active");
         }
     }
-    //cerco l'indice della foto successiva
-    if (fotoAttiva + 1 == arrayFoto.length) {
-        fotoSelezionata = 0;
-    } else {
-        fotoSelezionata = fotoAttiva + 1;
-    }
-
-    //attivo la foto successiva
+}
+function newActivate(){
     arrayFoto[fotoSelezionata].classList.add("active");
-
-    //attivo l'anteprima successiva
     arrayAnteprima[fotoSelezionata].classList.add("anteprimaActive");
-    
-    //attivo la description successiva
     arrayDescription[fotoSelezionata].classList.add("active");
-
-    //stampo in pagina l'array foto per controllo
-    console.log(arrayFoto);
-})
+}
